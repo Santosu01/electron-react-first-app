@@ -1,26 +1,34 @@
 {
   "name": "electron-app-test-2",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Desktop application with electron and react",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.101",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
+  "author": "Marcio Santos",
+  "homepage": "./",
+  "main": "electron/electron-main.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "compile-electron-main": "npx tsc --project tsconfig.electron.json",
+    "web-build": "react-scripts build",
+    "web-start": "react-scripts start",
+    "app-build": "npm run web-build && npm run compile-electron-main",
+    "app-start": "npm run app-build && electron-forge start --app-path ./electron/electron-main.js",
+    "postinstall": "electron-builder install-app-deps",
+    "package-app-files": "npm run app-build && electron-forge package",
+    "make-app-installer": "npm run app-build && electron-forge make"
+  },
+  "build": {
+    "appId": "com.example.myapp",
+    "files": [
+      "dist/**/*",
+      "electron/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "extraMetadata": {
+      "main": "electron/electron-main.js"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +47,38 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "**/symlink": false
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.101",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "cross-env": "^7.0.3",
+    "electron-is-dev": "^3.0.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "concurrently": "^8.2.2",
+    "electron": "^31.1.0",
+    "wait-on": "^7.2.0"
   }
 }
