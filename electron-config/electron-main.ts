@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, Menu } from "electron";
 import path from "node:path";
+import url from "url";
 
 const createWindow = () => {
   // Create the browser window.
@@ -8,19 +9,26 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "electron-config/electron-preload.ts"),
+      preload: path.join(__dirname, "electron-preload.js"),
     },
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("../build/index.html");
+  // mainWindow.loadFile("index.html");
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "index.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
 
   mainWindow.maximize();
 
   Menu.setApplicationMenu(null);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished

@@ -1,33 +1,34 @@
 {
-  "name": "electron-app-test-2",
+  "name": "electron-react-first-app",
   "version": "1.0.0",
   "description": "Desktop application with electron and react",
   "private": true,
   "author": "Marcio Santos",
   "homepage": "./",
-  "main": "electron/electron-main.js",
+  "main": "build/electron-main.js",
   "scripts": {
     "compile-electron-main": "npx tsc --project tsconfig.electron.json",
     "web-build": "react-scripts build",
     "web-start": "react-scripts start",
-    "app-build": "npm run web-build && npm run compile-electron-main",
-    "app-start": "npm run app-build && electron-forge start --app-path ./electron/electron-main.js",
+    "app-build": "npm run web-build && npm run compile-electron-main && copyfiles -f electron/*.js build/",
+    "app-start": "npm run app-build && electron-forge start --app-path ./build/electron-main.js",
     "postinstall": "electron-builder install-app-deps",
     "package-app-files": "npm run app-build && electron-forge package",
-    "make-app-installer": "npm run app-build && electron-forge make"
+    "make-app-installer": "npm run app-build && electron-forge make",
+    "pack": "npm run app-build && electron-builder --dir",
+    "dist": "npm run app-build && electron-builder"
   },
   "build": {
-    "appId": "com.example.myapp",
+    "appId": "com.first.app",
     "files": [
-      "dist/**/*",
-      "electron/*",
+      "build/**/*",
       "node_modules/**/*"
     ],
     "directories": {
       "buildResources": "build"
     },
     "extraMetadata": {
-      "main": "electron/electron-main.js"
+      "main": "build/electron-main.js"
     }
   },
   "eslintConfig": {
@@ -60,7 +61,6 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "cross-env": "^7.0.3",
-    "electron-is-dev": "^3.0.1",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -78,7 +78,9 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
     "electron": "^31.1.0",
+    "electron-builder": "^24.13.3",
     "wait-on": "^7.2.0"
   }
 }
